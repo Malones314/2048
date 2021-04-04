@@ -6,7 +6,7 @@
 using namespace std;
 void first_print();
 void print( int [4][4]);
-void ways( string way, int [4][4], int* number, int* maxNumber);
+void ways( string way, int [4][4], int* number, int* maxNumber, int* totalScore);
 int main(){
     system("title 2048");
     srand(time(0));
@@ -16,14 +16,16 @@ int main(){
     int number = 0;
     string way = "0";
     int matrix[4][4] = {0};
+    int*totalScore;
+    totalScore = new int(0);
     //WASD控制数字整体上下左右的移动
     do{
         print( matrix);
         int row, column;
+        cout << "你的积分为：" << *totalScore << endl;
         cout << "请输入WSAD操控上下左右：";
         cin >> way;
-        ways( way, matrix, &number, &maxNumber );
-
+        ways( way, matrix, &number, &maxNumber, totalScore);
         number++;
         if(number > 16)
             break;
@@ -33,19 +35,17 @@ int main(){
         }while( matrix[row][column] != 0);
         newNumber = n[rand()%3];
         matrix[row][column] = newNumber;
-
-
-
     }while( maxNumber < 2048 && number <= 16);
     print(matrix);
     if( maxNumber == 2048)
         cout << "you Win";
     else
         cout << "you Lose";
+    cout << endl << *totalScore;
     return 0;
 }
 
-void ways( string way, int matrix[4][4], int* number, int* maxNumber){
+void ways( string way, int matrix[4][4], int* number, int* maxNumber, int* totalScore){
     int number_ = 0;
     int maxNumber_ = *maxNumber;
     int i, j, k;
@@ -53,6 +53,7 @@ void ways( string way, int matrix[4][4], int* number, int* maxNumber){
         for( i = 0; i < 4; i++)
             for( j = 0; j < 3; j++)
                 if( matrix[i][j] == matrix[i][j+1]){
+                    *totalScore += matrix[i][j];
                     matrix[i][j] *= 2;
                     matrix[i][j+1] = 0;
                 }
@@ -67,6 +68,7 @@ void ways( string way, int matrix[4][4], int* number, int* maxNumber){
         for( j = 0; j < 4; j++)
             for( i = 0; i < 3; i++)
                 if( matrix[i][j] == matrix[i+1][j]){
+                    *totalScore += matrix[i][j];
                     matrix[i][j] *= 2;
                     matrix[i+1][j] = 0;
                 }
@@ -81,6 +83,7 @@ void ways( string way, int matrix[4][4], int* number, int* maxNumber){
         for( j = 3; j > -1; j--)
             for( i = 3; i > 0; i--)
                 if( matrix[i][j] == matrix[i-1][j]){
+                    *totalScore += matrix[i][j];
                     matrix[i][j] *= 2;
                     matrix[i-1][j] = 0;
                 }
@@ -95,6 +98,7 @@ void ways( string way, int matrix[4][4], int* number, int* maxNumber){
         for( i = 3; i > -1; i--)
             for( j = 3; j > 0; j--)
                 if( matrix[i][j] == matrix[i][j-1]){
+                    *totalScore += matrix[i][j];
                     matrix[i][j] *= 2;
                     matrix[i][j-1] = 0;
                 }
